@@ -1,96 +1,429 @@
-* {
+@font-face {
+  font-family: 'Roboto';
+  src: url('../fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*======= CSS variables =======*/
+:root{
+  --transition: all 0.3s ease;
+  --white-color: #DBD3D3;
+  --dark-color: #222;
+  --body-bg-color: #111;
+  --section-bg-color: #1a1a2e;
+  --navigation-item-hover-color: #3b5378;
+
+  --text-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  --box-shadow: 0 5px 25px rgb(0 0 0 / 20%);
+
+  --scroll-bar-color: #fff;
+  --scroll-thumb-color: #282f4e;
+  --scroll-thumb-hover-color: #454f6b;
+
+  --shadow-light: 0 4px 12px rgba(255,255,255,0.1);
+  --shadow-heavy: 0 8px 30px rgba(0,0,0,0.3);
+  --glass-bg: rgba(0,0,0,0.37);
+  --glass-border: rgba(203,203,203,0.15);
+}
+
+/*======= Main CSS =======*/
+
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
 
-body {
-  font-family: 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--primary-color); 
-  background: url('../../picturies/winter-bg.jpg') center/cover no-repeat fixed;
-  backdrop-filter: blur(4px);
-  min-height: 100vh;
+html, body{
+  background-image: url("../../picturies/summer.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden; 
+  height: 100%;
+}
+
+/*======= Header =======*/
+
+header{
+  position: fixed;
+  width: 100%;
+  height: calc(5rem + 1rem);
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  transition: var(--transition);
+  transition-property: height, background;
+}
+
+.Nav_bar{
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 200px;
+  transition: var(--transition);
 }
 
-.App {
-  text-align: center;
-  background-color: var(--bg-blur);
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-  width: 90%;
-  max-width: 600px;
+.Nav_bar .logo{
+  background: linear-gradient(45deg, #ffffff, #dbe6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  color: var(--white-color);
+  font-size: 1.8em;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: var(--text-shadow);
+  transition: transform 0.3s ease;
 }
 
-.Title {
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
-  color: #ff9966;
+/*======= Home =======*/
+
+.Home{
+  min-height: 100vh;
+  position: relative;
 }
 
-.Cards {
+.Home:before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(transparent, var(--section-bg-color));
+}
+
+.section{
+  position: relative;
+  color: var(--white-color);
+  background: var(--section-bg-color);
+  padding: 35px 200px;
+  transition: var(--transition);
+}
+
+.Up_slider_sky {
+  position: absolute;
+  top: 8%;
+  right: 5%;
+  width: 30%;
+  height: 15%;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content:center;
+  align-items: center;
+
+  filter: grayscale(40%) brightness(0.95);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.Up_slider_sky img:hover {
+  transform: scale(1.1);
+  filter: grayscale(0%) brightness(1.1);
+}
+
+.Swiper_wrapper {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-	
-.Card {
-  width: var(--card-size);
-  height: var(--card-size);
-  border: none;
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  transition: var(--transition);
-  background: none;
-  padding: 0;
+  align-items: center;
 }
 
-.Card:focus-visible {
-  outline: 2px solid var(--accent-color);
+.Up_slider_sky .Swiper_wrapper {
+  gap: 10px 10%;
 }
 
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: var(--transition);
-  filter: brightness(0.8);
+.Up_slider_sky img {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
- .Icon {
+.Swiper_slide_up.active {
+  transform: scale(1.9);
+  filter: drop-shadow(0 0 5px yellow);
+  transition: 0.3s;
+}
+
+/*======= Weather City =======*/
+.Current_weather_box_activated,
+.Current_weather_box_deactivated,
+.Current_weather_box_hidden {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  pointer-events: none;
+  top: 35%;
+  right: 12%;
+  background: var(--weather-bg, rgba(255, 255, 255, 0.9));
+  color: var(--text-color, #000);
+  padding: var(--weather-padding, 15px 20px);
+  border-radius: var(--border-radius, 10px);
+  box-shadow: var(--box-shadow, 0 4px 20px rgba(0,0,0,0.2));
+  font-family: var(--font-family, Arial, sans-serif);
+  width: var(--weather-box-width, 180px);
+  z-index: var(--z-index-weather, 1000);
 }
+
+.Current_weather_box_activated {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--transition, 0.5s ease), transform var(--transition, 0.5s ease);
+}
+
+.Current_weather_box_hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity var(--transition, 0.5s ease), transform var(--transition, 0.5s ease);
+}
+
+.Current_weather_box_deactivated {
+  display: none;
+}
+
+.Current_weather_box_activated .Close_weather {
+  background: none;
+  border: none;
+  font-size: var(--close-btn-size, 18px);
+  position: absolute;
+  top: var(--close-btn-top, 5px);
+  right: var(--close-btn-right, 8px);
+  cursor: pointer;
+  color: var(--close-btn-color, #333);
+}
+
+.Current_weather_box_activated .Close_weather:hover {
+  color: var(--close-btn-hover, #000);
+}
+
+.City_name {
+  font-weight: var(--city-font-weight, bold);
+  font-size: var(--city-font-size, 18px);
+  margin-bottom: var(--city-margin-bottom, 5px);
+}
+
+.Weather_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Temperature {
+  font-size: var(--temp-font-size, 16px);
+  font-weight: var(--temp-font-weight, bold);
+}
+
+.Weather_icon {
+  font-size: var(--icon-size, 20px);
+}
+
+/*======= Text =======*/
+
+.Text_content_activated {
+  position: absolute;
+  top: 20%;
+  color: var(--white-color);
+  margin: 0 200px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: auto;
+}
+
+.Text_content_deactivated {
+  position: absolute;
+  top: 20%;
+  color: var(--white-color);
+  margin: 0 200px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none; /* чтобы нельзя было кликать */
+}
+
+.Title{
+  font-size: 4em;
+  font-weight: 700;
+  text-shadow: var(--text-shadow);
+  margin-bottom: 5px;
+  transform: translateY(-50px);
+  opacity: 1;
+}
+
+.Text_content_activated p{
+  color: var(--white-color);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6); 
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  background: var(--glass-bg);        
+  border: 1px solid var(--glass-border);    
+  box-shadow: var(--shadow-heavy);         
+  backdrop-filter: blur(4px);                  
+  border-radius: 16px;  
+  max-width: 700px;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateX(0);
+  opacity: 1;
+  transition: 1s ease;
+  transition-delay: 0.3s;
+  transition-property: transform, opacity;
+  letter-spacing: 0.2px;
+}
+
+.Text_content_deactivated p{
+  color: var(--white-color);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6); 
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  background: var(--glass-bg);        
+  border: 1px solid var(--glass-border);    
+  box-shadow: var(--shadow-heavy);         
+  backdrop-filter: blur(4px);                  
+  border-radius: 16px;  
+  max-width: 700px;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateX(0);
+  opacity: 1;
+  transition: 1s ease;
+  transition-delay: 0.3s;
+  transition-property: transform, opacity;
+  letter-spacing: 0.2px;
+}
+
+
+/*======= Volume =======*/
+
+.Read_btn{
+  position: absolute;
+  top: 40%;
+  left:10%;
+  border: none;
+  outline: none;
+  background: var(--white-color);
+  color: var(--dark-color);
+  font-size: 1em;
+  font-weight: 500;
+  padding: 8px 25px;
+  display: flex;
+  align-items: center;
+  margin-top: 10%;
+  border-radius: 10px;
+  cursor: pointer;  
+  transform: translateX(0);
+  transition: var(--transition);
+  transition-delay: 0.3s;
+  transition-property: transform, opacity;
+}
+
+.Read_btn:hover {
+  background: #fff;
+  color: #111;
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.Read_btn i{
+  font-size: 1.6em;
+  transition: var(--transition);
+}
+
+.Read_btn:hover i{
+  transform: translateX(5px);
+}
+
+
+/*======= Volume =======*/
 
 .VolumeControl input[type='range'] {
-  width: 60%;
+  position: absolute;
+	top: 70%;
+	right: 10%;
+	
+  width: 15%;
   cursor: pointer;
   accent-color: var(--accent-color);
 }
 
-@media (max-width: 500px) {
-  .Cards {
-    flex-direction: column;
-    align-items: center;
+/*======= Down slider =======*/
+
+.Down_slider_seasons {
+  position:absolute;
+  top:80%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  width: 15%;
+  height: 5%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Down_slider_seasons .Swiper_wrapper {
+  gap: 10px 5%;
+}
+
+.Down_slider_seasons img {
+  display: flex;
+  min-width: 150px;
+  height: 80px;
+  object-fit: cover;
+  margin: 0 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  border: 3px solid var(--glass-border);  
+}
+
+.Down_slider_seasons img:hover {
+  transform: scale(1.1);
+}
+
+.Swiper_slide_activated {
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+.Down_slider_seasons img:nth-child(1),
+.Down_slider_seasons img:nth-child(4){
+  top: 5%;
+}
+
+@media (max-width: 768px) {
+  .Text_content_activated {
+    margin: 0 40px;
+    top: 15%;
   }
 
-  .Card {
-    width: 100%;
-    max-width: 200px;
+  .Text_content_activated p {
+    font-size: 0.9rem;
   }
 
-  .VolumeControl input[type='range'] {
-    width: 80%;
+  .Title {
+    font-size: 2.5rem;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+
+  .Read_btn {
+    font-size: 0.9rem;
+    padding: 6px 16px;
+  }
+
+  .header .Nav_bar {
+    padding: 0 20px;
   }
 }
