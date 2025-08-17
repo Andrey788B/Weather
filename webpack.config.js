@@ -1,13 +1,14 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const CopyPlugin = require("copy-webpack-plugin")
 
 module.exports = {
-    context: path.resolve(__dirname, 'src'),
+    context: __dirname,
     entry: {
-        main:'./js/index.js'
+        main:'./src/js/index.ts'
     },
     
     output: {
@@ -15,13 +16,19 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         clean: true, 
     },
+
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.json'],
+    },
+
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'public/index.html'),
         }),
-          new MiniCssExtractPlugin({
+        new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
         }),
+        new ForkTsCheckerWebpackPlugin(),
 
         // new CopyPlugin({
         //     patterns: [
@@ -32,6 +39,11 @@ module.exports = {
     ],
     module: {
         rules: [
+            {
+                test: /\.[tj]sx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
             {
                 test: /\.scss$/,
                 use: [
@@ -56,14 +68,8 @@ module.exports = {
                     'sass-loader',
                     ],
             },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/i,
-                type: 'asset/resource',
-            },
-                  {
-                test: /\.(png|jpe?g|gif|mp3|svg|woff2?|ttf|eot)$/i,
-                type: 'asset/resource',
-            },
+            { test: /\.(woff|woff2|eot|ttf|otf)$/i, type: 'asset/resource' },
+            { test: /\.(png|jpe?g|gif|mp3|svg|woff2?|ttf|eot)$/i, type: 'asset/resource' },
         ],
     },
 }
